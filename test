@@ -782,13 +782,14 @@ function library:Window(name)
         return dropFunctions
     end
 
-function functions:ColorPicker(name, default, callback)
+function functions:ColorPicker(name, defaultColor, callback)
     callback = callback or function() end
 
-    local color3 = typeof(default) == "Color3" and default or Color3.fromRGB(0, 168, 255)
-    local rainbowEnabled = typeof(default) == "boolean" and default or false
+    local color3 = typeof(defaultColor) == "Color3" and defaultColor or Color3.fromRGB(0, 168, 255)
+    local rainbowEnabled = false
     local con
 
+    -- Create UI elements
     local ColorPicker = Instance.new("TextButton")
     local PickerCorner = Instance.new("UICorner")
     local PickerDescription = Instance.new("TextLabel")
@@ -797,21 +798,12 @@ function functions:ColorPicker(name, default, callback)
     local ToggleFiller_2 = Instance.new("Frame")
     local TextLabel = Instance.new("TextLabel")
     local ClosePicker = Instance.new("TextButton")
-    local Canvas = Instance.new("Frame")
-    local CanvasGradient = Instance.new("UIGradient")
-    local Cursor = Instance.new("ImageLabel")
-    local Color = Instance.new("Frame")
-    local ColorGradient = Instance.new("UIGradient")
-    local ColorSlider = Instance.new("Frame")
-    local Title = Instance.new("TextLabel")
-    local UICorner = Instance.new("UICorner")
-    local ColorCorner = Instance.new("UICorner")
-    local BlackOverlay = Instance.new("ImageLabel")
 
     sizes[winCount] += 32
     listOffset[winCount] += 32
     Window.Size = UDim2.new(0, 207, 0, sizes[winCount] + 10)
 
+    -- Color picker button
     ColorPicker.Name = "ColorPicker"
     ColorPicker.Parent = Window
     ColorPicker.Position = UDim2.new(0, 137, 0, listOffset[winCount])
@@ -830,8 +822,8 @@ function functions:ColorPicker(name, default, callback)
         ColorPickerFrame.Visible = not ColorPickerFrame.Visible
     end)
 
-    PickerCorner.Parent = ColorPicker
     PickerCorner.CornerRadius = UDim.new(0, 2)
+    PickerCorner.Parent = ColorPicker
 
     PickerDescription.Name = "PickerDescription"
     PickerDescription.Parent = ColorPicker
@@ -845,6 +837,7 @@ function functions:ColorPicker(name, default, callback)
     PickerDescription.TextXAlignment = Enum.TextXAlignment.Left
     PickerDescription.ZIndex = 2 + zindex
 
+    -- Frame
     ColorPickerFrame.Name = "ColorPickerFrame"
     ColorPickerFrame.Parent = ColorPicker
     ColorPickerFrame.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
@@ -854,6 +847,7 @@ function functions:ColorPicker(name, default, callback)
     ColorPickerFrame.ZIndex = 3 + zindex
     ColorPickerFrame.Visible = false
 
+    -- RGB Toggle
     ToggleRGB.Name = "ToggleRGB"
     ToggleRGB.Parent = ColorPickerFrame
     ToggleRGB.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
@@ -873,7 +867,7 @@ function functions:ColorPicker(name, default, callback)
     ToggleFiller_2.Position = UDim2.new(0, 5, 0, 5)
     ToggleFiller_2.Size = UDim2.new(0, 12, 0, 12)
     ToggleFiller_2.ZIndex = 4 + zindex
-    ToggleFiller_2.Visible = rainbowEnabled
+    ToggleFiller_2.Visible = false
 
     TextLabel.Parent = ToggleRGB
     TextLabel.BackgroundTransparency = 1
@@ -886,6 +880,7 @@ function functions:ColorPicker(name, default, callback)
     TextLabel.TextXAlignment = Enum.TextXAlignment.Left
     TextLabel.ZIndex = 4 + zindex
 
+    -- Close Button
     ClosePicker.Name = "ClosePicker"
     ClosePicker.Parent = ColorPickerFrame
     ClosePicker.BackgroundColor3 = Color3.fromRGB(47, 54, 64)
@@ -901,45 +896,49 @@ function functions:ColorPicker(name, default, callback)
         ColorPickerFrame.Visible = false
     end)
 
-    -- Rainbow toggle logic
+    -- Rainbow logic
     local function startRainbow()
         if con then con:Disconnect() end
         ToggleFiller_2.Visible = true
+        rainbowEnabled = true
         con = stepped:Connect(function()
-            local hue2 = tick() % 5 / 5
-            color3 = Color3.fromHSV(hue2, 1, 1)
-            callback(color3)
+            local hue = tick() % 5 / 5
+            color3 = Color3.fromHSV(hue, 1, 1)
             ColorPicker.BackgroundColor3 = color3
+            callback(color3)
         end)
     end
 
-    ToggleRGB.MouseButton1Down:Connect(function()
-        ToggleFiller_2.Visible = not ToggleFiller_2.Visible
+    local function stopRainbow()
         if con then con:Disconnect() end
-        if ToggleFiller_2.Visible then
+        ToggleFiller_2.Visible = false
+        rainbowEnabled = false
+    end
+
+    ToggleRGB.MouseButton1Click:Connect(function()
+        if rainbowEnabled then
+            stopRainbow()
+            callback(color3)
+        else
             startRainbow()
         end
     end)
 
-    if rainbowEnabled then
-        startRainbow()
-    else
-        ColorPicker.BackgroundColor3 = color3
-    end
-
-    -- Add Color UI code (Canvas, Cursor, Sliders) below as needed or keep existing
+    -- Default state
+    ColorPicker.BackgroundColor3 = color3
+    callback(color3)
 
     table.insert(colorPickers, ColorPickerFrame)
 
     local colorFuncs = {}
 
-    function colorFuncs:UpdateColorPicker(newColor)
-        if typeof(newColor) == "Color3" then
-            if con then con:Disconnect() end
-            ToggleFiller_2.Visible = false
-            color3 = newColor
+    function colorFuncs:UpdateColorPicker(newValue)
+        if typeof(newValue) == "Color3" then
+            stopRainbow()
+            color3 = newValue
             ColorPicker.BackgroundColor3 = color3
-        elseif typeof(newColor) == "boolean" and newColor == true then
+            callback(color3)
+        elseif typeof(newValue) == "boolean" and newValue == true then
             startRainbow()
         end
     end
