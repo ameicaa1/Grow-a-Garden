@@ -704,7 +704,9 @@ function functions:Dropdown_multi(text, buttons, optional_height, callback)
                 table.insert(selectedNames, key)
             end
 
-            if #selectedNames == 1 then
+            if #selectedNames == 0 then
+                Dropdown.Text = text
+            elseif #selectedNames == 1 then
                 Dropdown.Text = selectedNames[1]
             else
                 Dropdown.Text = #selectedNames .. " Selected"
@@ -749,6 +751,7 @@ function functions:Dropdown_multi(text, buttons, optional_height, callback)
             }):Play()
         end
         selectedButtons = {}
+        Dropdown.Text = text
     end
 
     for _, v in pairs(buttons) do
@@ -935,7 +938,6 @@ end)
             selectedButton = Button
             Button.BackgroundColor3 = Color3.fromRGB(76, 209, 55)
 
-            Dropdown.Text = name
             DropdownFrame.Visible = false
             DownSign.Text = "▼"
 
@@ -950,6 +952,7 @@ end)
             if v:IsA("TextButton") and v.Text:match(name) then
                 if selectedButton == v then
                     selectedButton = nil
+                    Dropdown.Text = text
                 end
                 v:Destroy()
                 break
@@ -976,6 +979,7 @@ end)
             }):Play()
             selectedButton = nil
         end
+        Dropdown.Text = text
     end
 
     for _, v in pairs(buttons) do
