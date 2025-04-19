@@ -532,16 +532,17 @@ function functions:Slider(text, min, max, default, callback)
 end
 
 
-function functions:Dropdown_multi(text, buttons, callback)
+function functions:Dropdown_multi(text, buttons, optional_height, callback)
     text = text or "Dropdown"
     buttons = buttons or {}
     callback = callback or function() end
+    optional_height = optional_height or 5
 
     local DropdownContainer = Instance.new("Frame")
     DropdownContainer.Name = "DropdownContainer"
     DropdownContainer.Parent = Window
     DropdownContainer.BackgroundTransparency = 1
-    DropdownContainer.Position = UDim2.new(0, 10, 0, listOffset[winCount])
+    DropdownContainer.Position = UDim2.new(0, 10, 0, listOffset[winCount] - optional_height)
     listOffset[winCount] = listOffset[winCount] + 50
     DropdownContainer.Size = UDim2.new(1, -20, 0, 30)
     DropdownContainer.ZIndex = 2 + zindex
@@ -763,16 +764,17 @@ function functions:Dropdown_multi(text, buttons, callback)
 end
 
 
-function functions:Dropdown(text, buttons, callback)
+function functions:Dropdown(text, buttons, optional_height, callback)
     text = text or "Dropdown"
     buttons = buttons or {}
     callback = callback or function() end
+    optional_height = optional_height or 5
 
     local DropdownContainer = Instance.new("Frame")
     DropdownContainer.Name = "DropdownContainer"
     DropdownContainer.Parent = Window
     DropdownContainer.BackgroundTransparency = 1
-    DropdownContainer.Position = UDim2.new(0, 10, 0, listOffset[winCount])
+    DropdownContainer.Position = UDim2.new(0, 10, 0, listOffset[winCount] - optional_height )
     listOffset[winCount] = listOffset[winCount] + 50
     DropdownContainer.Size = UDim2.new(1, -20, 0, 30)
     DropdownContainer.ZIndex = 2 + zindex
