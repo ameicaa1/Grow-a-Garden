@@ -976,7 +976,6 @@ end)
             }):Play()
             selectedButton = nil
         end
-        Dropdown.Text = text
     end
 
     for _, v in pairs(buttons) do
