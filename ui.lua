@@ -843,30 +843,39 @@ function functions:Dropdown(text, buttons, optional_height, callback)
 
     table.insert(dropdowns, DropdownFrame)
 
-    Dropdown.MouseButton1Click:Connect(function()
-        for _, v in pairs(dropdowns) do
-            if v ~= DropdownFrame then
-                v.Visible = false
-                if v.Parent:FindFirstChild("DownSign") then
-                    v.Parent.DownSign.Text = "▼"
-                end
+local RunService = game:GetService("RunService")
+
+Dropdown.MouseButton1Click:Connect(function()
+    for _, v in pairs(dropdowns) do
+        if v ~= DropdownFrame then
+            v.Visible = false
+            if v.Parent:FindFirstChild("DownSign") then
+                v.Parent.DownSign.Text = "▼"
             end
         end
+    end
 
-        DropdownFrame.Visible = not DropdownFrame.Visible
-        DownSign.Text = DropdownFrame.Visible and "▲" or "▼"
+    DropdownFrame.Visible = not DropdownFrame.Visible
+    DownSign.Text = DropdownFrame.Visible and "▲" or "▼"
 
-        if DropdownFrame.Visible then
-            local count = 0
-            for _, v in ipairs(DropdownFrame:GetChildren()) do
-                if v:IsA("TextButton") then count = count + 1 end
-            end
-            DropdownFrame.Size = UDim2.new(0, DropdownContainer.AbsoluteSize.X, 0, math.min(count * 32, 160))
-            DropdownFrame.Position = UDim2.new(0, DropdownContainer.AbsolutePosition.X, 0, DropdownContainer.AbsolutePosition.Y + DropdownContainer.AbsoluteSize.Y)
-        else
-            DropdownFrame.Size = UDim2.new(0, DropdownContainer.AbsoluteSize.X, 0, 0)
+    if DropdownFrame.Visible then
+        -- Defer to next frame to get correct positioning
+        RunService.RenderStepped:Wait()
+
+        local count = 0
+        for _, v in ipairs(DropdownFrame:GetChildren()) do
+            if v:IsA("TextButton") then count = count + 1 end
         end
-    end)
+
+        local absPos = DropdownContainer.AbsolutePosition
+        local absSize = DropdownContainer.AbsoluteSize
+        DropdownFrame.Position = UDim2.new(0, absPos.X, 0, absPos.Y + absSize.Y)
+        DropdownFrame.Size = UDim2.new(0, absSize.X, 0, math.min(count * 32, 160))
+    else
+        DropdownFrame.Size = UDim2.new(0, DropdownContainer.AbsoluteSize.X, 0, 0)
+    end
+end)
+
 
     local dropFunctions = {}
     local canvasSize = 0
