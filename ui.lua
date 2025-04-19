@@ -576,13 +576,13 @@ function functions:Dropdown_multi(text, buttons, callback)
     DownSign.ZIndex = 4 + zindex
 
     Dropdown.MouseEnter:Connect(function()
-        TweenService(Dropdown, TweenInfo.new(0.1), {
+        TweenService:Create(Dropdown, TweenInfo.new(0.1), {
             BackgroundColor3 = Color3.fromRGB(55, 55, 55)
         }):Play()
     end)
 
     Dropdown.MouseLeave:Connect(function()
-        TweenService(Dropdown, TweenInfo.new(0.1), {
+        TweenService:Create(Dropdown, TweenInfo.new(0.1), {
             BackgroundColor3 = Color3.fromRGB(45, 45, 45)
         }):Play()
     end)
@@ -670,7 +670,7 @@ function functions:Dropdown_multi(text, buttons, callback)
 
         Button.MouseEnter:Connect(function()
             if not selectedButtons[name] then
-                TweenService(Button, TweenInfo.new(0.1), {
+                TweenService:Create(Button, TweenInfo.new(0.1), {
                     BackgroundColor3 = Color3.fromRGB(55, 55, 55)
                 }):Play()
             end
@@ -678,7 +678,7 @@ function functions:Dropdown_multi(text, buttons, callback)
 
         Button.MouseLeave:Connect(function()
             if not selectedButtons[name] then
-                TweenService(Button, TweenInfo.new(0.1), {
+                TweenService:Create(Button, TweenInfo.new(0.1), {
                     BackgroundColor3 = Color3.fromRGB(45, 45, 45)
                 }):Play()
             end
@@ -689,7 +689,7 @@ function functions:Dropdown_multi(text, buttons, callback)
 
             if isSelected then
                 selectedButtons[name] = nil
-                TweenService(Button, TweenInfo.new(0.1), {
+                TweenService:Create(Button, TweenInfo.new(0.1), {
                     BackgroundColor3 = Color3.fromRGB(45, 45, 45)
                 }):Play()
             else
@@ -744,7 +744,7 @@ function functions:Dropdown_multi(text, buttons, callback)
 
     function dropFunctions:Clear()
         for _, btn in pairs(selectedButtons) do
-            TweenService(btn, TweenInfo.new(0.1), {
+            TweenService:Create(btn, TweenInfo.new(0.1), {
                 BackgroundColor3 = Color3.fromRGB(45, 45, 45)
             }):Play()
         end
@@ -807,13 +807,13 @@ function functions:Dropdown(text, buttons, callback)
     DownSign.ZIndex = 4 + zindex
 
     Dropdown.MouseEnter:Connect(function()
-        TweenService(Dropdown, TweenInfo.new(0.1), {
+        TweenService:Create(Dropdown, TweenInfo.new(0.1), {
             BackgroundColor3 = Color3.fromRGB(55, 55, 55)
         }):Play()
     end)
 
     Dropdown.MouseLeave:Connect(function()
-        TweenService(Dropdown, TweenInfo.new(0.1), {
+        TweenService:Create(Dropdown, TweenInfo.new(0.1), {
             BackgroundColor3 = Color3.fromRGB(45, 45, 45)
         }):Play()
     end)
@@ -904,7 +904,7 @@ end
 
         Button.MouseEnter:Connect(function()
             if Button ~= selectedButton then
-                TweenService(Button, TweenInfo.new(0.1), {
+                TweenService:Create(Button, TweenInfo.new(0.1), {
                     BackgroundColor3 = Color3.fromRGB(55, 55, 55)
                 }):Play()
             end
@@ -912,7 +912,7 @@ end
 
         Button.MouseLeave:Connect(function()
             if Button ~= selectedButton then
-                TweenService(Button, TweenInfo.new(0.1), {
+                TweenService:Create(Button, TweenInfo.new(0.1), {
                     BackgroundColor3 = Color3.fromRGB(45, 45, 45)
                 }):Play()
             end
@@ -920,7 +920,7 @@ end
 
         Button.MouseButton1Click:Connect(function()
             if selectedButton then
-                TweenService(selectedButton, TweenInfo.new(0.1), {
+                TweenService:Create(selectedButton, TweenInfo.new(0.1), {
                     BackgroundColor3 = Color3.fromRGB(45, 45, 45)
                 }):Play()
             end
@@ -959,7 +959,7 @@ end
 
     function dropFunctions:Clear()
         if selectedButton then
-            TweenService(selectedButton, TweenInfo.new(0.1), {
+            TweenService:Create(selectedButton, TweenInfo.new(0.1), {
                 BackgroundColor3 = Color3.fromRGB(45, 45, 45)
             }):Play()
             selectedButton = nil
